@@ -42,6 +42,10 @@ logic [29:0] pinmux0_reg;
 logic [29:0] pinmux1_reg;
 logic [8:0]  pinmux2_reg;
 
+logic boot_rst_one;
+logic boot_rst_n;
+
+
 //register address map
 
 localparam GPIO_DIR_ADDR        = 8'h00;
@@ -68,9 +72,20 @@ assign pslverr = !((paddr == GPIO_DIR_ADDR ) || (paddr == GPIO_OUT_ADDR)  || (pa
                  (paddr == PINMUX2_ADDR ) || (paddr == GPIO_SET_ADDR) || (paddr == GPIO_CLR_ADDR) || 
                  (paddr == GPIO_TOGGLE_ADDR)); 
 
+always_ff @(posedge pclk or negedge presetn) begin
+	if(!presetn) begin
+	boot_rst_one <= 1'b0;
+	boot_rst_n   <= 1'b0;
+	end
+	else begin
+	boot_rst_one <= 1'b1;
+	boot_rst_n   <= boot_rst_one;
+	end
+end
+
 //write logic
-always_ff @(posedge pclk or negedge presetn) begin 
-    if(!presetn) begin
+always_ff @(posedge pclk or negedge boot_rst_n) begin 
+    if(!boot_rst_n) begin
 
          pready               <= 1'b0;
  
