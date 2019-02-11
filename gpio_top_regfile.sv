@@ -1,10 +1,10 @@
-module gpio_top_regfile (
+module gpio_regfile (
     
     //signals for the cpu 
     input logic           pclk,
     input logic           presetn,
 
-    input logic [7:0]     paddr,
+    input logic [7:0]    paddr,
     input logic           pwrite,
     input logic [31:0]    pwdata,
 
@@ -15,218 +15,296 @@ module gpio_top_regfile (
     output logic          pready,
     output logic          pslverr,
 
+    // signals for internal blocks
 
-    //inout from the pad block
-   
-    inout logic           gpio_out0,
-    inout logic           gpio_out1,
-    inout logic           gpio_out2,
-    inout logic           gpio_out3,
-    inout logic           gpio_out4,
-    inout logic           gpio_out5,
-    inout logic           gpio_out6,
-    inout logic           gpio_out7,
-    inout logic           gpio_out8,
-    inout logic           gpio_out9,
-    inout logic           gpio_out10,
-    inout logic           gpio_out11,
-    inout logic           gpio_out12,
-    inout logic           gpio_out13,
-    inout logic           gpio_out14,
-    inout logic           gpio_out15,
-    inout logic           gpio_out16,
-
-
-   //input ports 
-    input logic         uart_tx_w,
-
-    input logic         spi_cs_w,
-    input logic         spi_clk_w,
-    input logic         spi_mosi_w,
-
-    input logic         i2c_scl_w,
-    input logic         i2c_sda_out_w,
-    input logic         i2c_sda_oe_w,
-
-    input logic         clk_out_w,
-    input logic [15:0]  debug_w,
-
-    input logic         atclk_w,
-    input logic         atvalid_w,
-    input logic         atready_w,
-    input logic         atsync_w,
-
-    input logic [2:0]   atid_w,
-    input logic [15:0]  atdata_w,
-
-    input logic         xtal_out_w,
-
-    //output signals
-    output logic         uart_rx_w,
-    output logic         spi_miso_w,
-    output logic         i2c_sda_in_w,
-
-    output logic         pll_clk_fail_out,
-    output logic         rc_clk_fail_out,
-    output logic         boot_load_done_out, 
-
-    output logic [16:0]  irq_in_w,
-
-    output logic [31:0] gpio_pullup_out_w,
-    output logic [31:0] gpio_pulldown_out_w,
-    output logic [31:0] gpio_opendrain_out_w,
-                               
-    output logic [31:0] gpio_schmitt_out_w,
-                               
-    output logic [31:0] gpio_drv0_out_w,
-    output logic [31:0] gpio_drv1_out_w,
-                               
-    output logic [31:0] gpio_int_en_out_w,
-    output logic [31:0] gpio_int_status_out_w,
-                               
-    output logic [31:0] gpio_rise_en_out_w,
-    output logic [31:0] gpio_fall_en_out_w,
-                               
-    output logic [31:0] gpio_high_en_out_w,
-    output logic [31:0] gpio_low_en_out_w,
-                               
-    output logic [31:0] gpio_lock_out_w,
-    output logic [31:0] debug_sel_out_w 
+    output logic [22:0] gpio_dir_out,       
+    output logic [22:0] gpio_out_out,     
+    input  logic [22:0] gpio_in,  
+      
+    output logic [31:0] gpio_pullup_out,
+    output logic [31:0] gpio_pulldown_out,
+    output logic [31:0] gpio_opendrain_out,
     
-);
+    output logic [31:0] gpio_schmitt_out,
+    
+    output logic [31:0] gpio_drv0_out,
+    output logic [31:0] gpio_drv1_out,
+    
+    output logic [31:0] gpio_int_en_out,
+    output logic [31:0] gpio_int_status_out,
+    
+    output logic [31:0] gpio_rise_en_out,
+    output logic [31:0] gpio_fall_en_out,
+    
+    output logic [31:0] gpio_high_en_out,
+    output logic [31:0] gpio_low_en_out,
+    
+    output logic [29:0] pinmux0_out,
+    output logic [29:0] pinmux1_out,
+    output logic [8:0]  pinmux2_out,
 
-    logic [31:0] gpio_dir_out_w;   // done     
-    logic [31:0] gpio_out_out_w;   //done  
-    logic [31:0] gpio_in_w;       //done
+    output logic [31:0] gpio_lock_out,
+    output logic [31:0] debug_sel_out   
+    );
 
-    logic [31:0] pinmux0_out_w;  //done
-    logic [31:0] pinmux1_out_w;  //done
+
+logic read_en;
+logic write_en;
+//logic [7:0] addr;
+
+logic [22:0] gpio_dir_reg;       
+logic [22:0] gpio_out_reg;
+
+logic [31:0] gpio_pullup_reg;    
+logic [31:0] gpio_pulldown_reg;  
+logic [31:0] gpio_opendrain_reg; 
+
+logic [31:0] gpio_schmitt_reg;   
+
+logic [31:0] gpio_drv0_reg;      
+logic [31:0] gpio_drv1_reg;      
+
+logic [31:0] gpio_int_en_reg;    
+logic [31:0] gpio_int_status_reg;
+
+logic [31:0] gpio_rise_en_reg;   
+logic [31:0] gpio_fall_en_reg;   
+
+logic [31:0] gpio_high_en_reg;   
+logic [31:0] gpio_low_en_reg;    
+
+logic [29:0] pinmux0_reg;        
+logic [29:0] pinmux1_reg;
+logic [8:0]  pinmux2_reg;
+
+logic [31:0] gpio_lock_reg;      
+logic [31:0] debug_sel_reg;      
+
+//register address map
+
+localparam GPIO_DIR_ADDR        = 8'h00;
+localparam GPIO_OUT_ADDR        = 8'h04;
+localparam GPIO_IN_ADDR         = 8'h08;
+
+localparam GPIO_SET_ADDR        = 8'h0C;
+localparam GPIO_CLR_ADDR        = 8'h10;
+localparam GPIO_TOGGLE_ADDR     = 8'h14;
+
+localparam GPIO_PULLUP_ADDR     = 8'h18;
+localparam GPIO_PULLDOWN_ADDR   = 8'h1C;
+localparam GPIO_OPENDRAIN_ADDR  = 8'h20;
+
+localparam GPIO_SCHMITT_ADDR    = 8'h24;
+
+localparam GPIO_DRV0_ADDR       = 8'h28;
+localparam GPIO_DRV1_ADDR       = 8'h2C;
+
+localparam GPIO_INT_EN_ADDR     = 8'h30;
+localparam GPIO_INT_STATUS_ADDR = 8'h34;
+localparam GPIO_INT_CLR_ADDR    = 8'h38;
+
+localparam GPIO_RISE_EN_ADDR    = 8'h3C;
+localparam GPIO_FALL_EN_ADDR    = 8'h40;
+
+localparam GPIO_HIGH_EN_ADDR    = 8'h44;
+localparam GPIO_LOW_EN_ADDR     = 8'h48;
+
+localparam PINMUX0_ADDR         = 8'h4C;  //0-9     pin access
+localparam PINMUX1_ADDR         = 8'h50; //10-19    pin access
+localparam PINMUX2_ADDR         = 8'h54; //20-22  pin access
+
+localparam GPIO_LOCK_ADDR       = 8'h58;
+localparam DEBUG_SEL_ADDR       = 8'h5C;
+
+
+assign write_en = psel & penable & pwrite;
+
+assign read_en = psel & penable & (~pwrite);
+
+assign pslverr = !( (paddr == GPIO_DIR_ADDR ) || (paddr == GPIO_OUT_ADDR)  || (paddr == GPIO_IN_ADDR ) ||
+                 (paddr ==  GPIO_PULLUP_ADDR ) ||(paddr ==  GPIO_PULLDOWN_ADDR) ||(paddr == GPIO_OPENDRAIN_ADDR ) ||
+                 (paddr == GPIO_SCHMITT_ADDR  ) ||(paddr == GPIO_DRV0_ADDR ) || (paddr == GPIO_DRV1_ADDR ) ||
+                 (paddr == GPIO_INT_EN_ADDR ) ||(paddr == GPIO_INT_STATUS_ADDR ) || (paddr ==  GPIO_SET_ADDR ) || 
+                 (paddr ==  GPIO_CLR_ADDR ) || (paddr ==  GPIO_TOGGLE_ADDR ) || (paddr ==  GPIO_RISE_EN_ADDR) ||
+                 (paddr == GPIO_FALL_EN_ADDR  )||(paddr == GPIO_HIGH_EN_ADDR ) || (paddr == GPIO_LOW_EN_ADDR )|| 
+                 (paddr == PINMUX0_ADDR  )||(paddr == PINMUX1_ADDR )|| (paddr == PINMUX2_ADDR )||
+                 (paddr == GPIO_LOCK_ADDR ) ||(paddr ==  DEBUG_SEL_ADDR )); 
+
+//write logic
+always_ff @(posedge pclk or negedge presetn) begin 
+    if(!presetn) begin
+
+         pready               <= 1'b0;
  
-    //pinmux instance wires
+         gpio_dir_reg        <= 23'h0;      
+         gpio_out_reg        <= 23'h0;
+         
+         gpio_pullup_reg     <= 32'h0;
+         gpio_pulldown_reg   <= 32'h0;
+         gpio_opendrain_reg  <= 32'h0;
+         
+         gpio_schmitt_reg    <= 32'h0;
+         
+         gpio_drv0_reg       <= 32'h0;
+         gpio_drv1_reg       <= 32'h0;
+         
+         gpio_int_en_reg     <= 32'h0;
+         gpio_int_status_reg <= 32'h0;
+         
+         gpio_rise_en_reg    <= 32'h0;
+         gpio_fall_en_reg    <= 32'h0;
+         
+         gpio_high_en_reg    <= 32'h0;
+         gpio_low_en_reg     <= 32'h0;
+         
+         pinmux0_reg         <= 30'h0;
+         pinmux1_reg         <= 30'h0;
+         pinmux2_reg         <= 9'h0;
+         
+         gpio_lock_reg       <= 32'h0;
+         debug_sel_reg       <= 32'h0;
 
-    logic [16:0]  gpio_pad_in_w;   //done
-    logic [16:0]  gpio_pad_out_w;  //done
-    logic [16:0]  gpio_pad_oe_w;   //done
+end
+        else begin
+            pready          <= 1'b1;
+            if(write_en) begin
+            case(paddr)
 
+             GPIO_DIR_ADDR        :    gpio_dir_reg         <=  pwdata[22:0]  ;
+             GPIO_OUT_ADDR        :    gpio_out_reg         <=  pwdata[22:0]  ;
 
+             GPIO_SET_ADDR        :    gpio_out_reg         <=  gpio_out_reg | pwdata[22:0]  ;
+             GPIO_CLR_ADDR        :    gpio_out_reg         <=  gpio_out_reg & ~pwdata[22:0] ;
+             GPIO_TOGGLE_ADDR     :    gpio_out_reg         <=  gpio_out_reg ^ pwdata[22:0]  ;
 
-//boot_reg file instance
- gpio_regfile gpio_regfile_instance (
-    .pclk                (pclk),  
-    .presetn             (presetn),
+             GPIO_PULLUP_ADDR     :    gpio_pullup_reg      <=  pwdata  ;
+             GPIO_PULLDOWN_ADDR   :    gpio_pulldown_reg    <=  pwdata  ;
+             GPIO_OPENDRAIN_ADDR  :    gpio_opendrain_reg   <=  pwdata  ;
 
-    .paddr               (paddr),
-    .pwrite              (pwrite),
-    .pwdata              (pwdata),
+             GPIO_SCHMITT_ADDR    :    gpio_schmitt_reg     <=  pwdata  ;
 
-    .penable             (penable),
-    .psel                (psel),
+             GPIO_DRV0_ADDR       :    gpio_drv0_reg        <=  pwdata  ;
+             GPIO_DRV1_ADDR       :    gpio_drv1_reg        <=  pwdata  ;
 
-    .prdata              (prdata),
-    .pready              (pready),
-    .pslverr             (pslverr),
+             GPIO_INT_EN_ADDR     :    gpio_int_en_reg      <=  pwdata  ;
+             // updated by the gpio interupt , currently only cleared by the apb interface
+             //                     gpio_int_status_reg  <=  gpio_int_status_reg | gpio_interupt ;
+             GPIO_INT_CLR_ADDR    :    gpio_int_status_reg  <=  gpio_int_status_reg & ~pwdata;
 
-    .gpio_dir_out        (gpio_dir_out_w),         
-    .gpio_out_out        (gpio_out_out_w),   
-    .gpio_in             (gpio_in_w),        
-    
-    .gpio_pullup_out     (gpio_pullup_out_w),  
-    .gpio_pulldown_out   (gpio_pulldown_out_w),
-    .gpio_opendrain_out  (gpio_opendrain_out_w),
-   
-    .gpio_schmitt_out    (gpio_schmitt_out_w),
-   
-    .gpio_drv0_out       (gpio_drv0_out_w),
-    .gpio_drv1_out       (gpio_drv1_out_w),
-   
-    .gpio_int_en_out     (gpio_int_en_out_w),
-    .gpio_int_status_out (gpio_int_status_out_w),
-   
-    .gpio_rise_en_out    (gpio_rise_en_out_w),
-    .gpio_fall_en_out    (gpio_fall_en_out_w),
+             GPIO_RISE_EN_ADDR    :    gpio_rise_en_reg     <=  pwdata  ;
+             GPIO_FALL_EN_ADDR    :    gpio_fall_en_reg     <=  pwdata  ;
 
-    .gpio_high_en_out    (gpio_high_en_out_w),
-    .gpio_low_en_out     (gpio_low_en_out_w),
-   
-    .pinmux0_out         (pinmux0_out_w),
-    .pinmux1_out         (pinmux1_out_w),
+             GPIO_HIGH_EN_ADDR    :    gpio_high_en_reg     <=  pwdata  ;
+             GPIO_LOW_EN_ADDR     :    gpio_low_en_reg      <=  pwdata  ;
 
-    .gpio_lock_out       (gpio_lock_out_w),
-    .debug_sel_out       (debug_sel_out_w)  
- 
- );
+             PINMUX0_ADDR         :    pinmux0_reg          <=  pwdata[29:0]  ;
+             PINMUX1_ADDR         :    pinmux1_reg          <=  pwdata[29:0]  ;
+             PINMUX2_ADDR         :    pinmux2_reg          <=  pwdata[8:0]  ;
 
+             GPIO_LOCK_ADDR       :    gpio_lock_reg        <=  pwdata  ;
+             DEBUG_SEL_ADDR       :    debug_sel_reg        <=  pwdata  ;
 
- //pinmux instance
- pinmux_gpio_ss pinmux_gpio_ss_instance (
-    .gpio_pad_in    (gpio_pad_in_w),
-    .gpio_pad_out   (gpio_pad_out_w),
-    .gpio_pad_oe    (gpio_pad_oe_w),
+             default: begin
+	    			gpio_dir_reg        <= gpio_dir_reg;
+	    			gpio_out_reg        <= gpio_out_reg;
+	    			gpio_pullup_reg     <= gpio_pullup_reg;
+	    			gpio_pulldown_reg   <= gpio_pulldown_reg;
+	    			gpio_opendrain_reg  <= gpio_opendrain_reg;
+	    			gpio_schmitt_reg    <= gpio_schmitt_reg;
+	    			gpio_drv0_reg       <= gpio_drv0_reg;
+	    			gpio_drv1_reg       <= gpio_drv1_reg;
+	   		    	gpio_int_en_reg     <= gpio_int_en_reg;
+	    			gpio_int_status_reg <= gpio_int_status_reg;
+	    			gpio_rise_en_reg    <= gpio_rise_en_reg;
+	    			gpio_fall_en_reg    <= gpio_fall_en_reg;
+	    			gpio_high_en_reg    <= gpio_high_en_reg;
+	    			gpio_low_en_reg     <= gpio_low_en_reg;
+	    			pinmux0_reg         <= pinmux0_reg;
+	    			pinmux1_reg         <= pinmux1_reg;
+                    pinmux2_reg         <= pinmux2_reg;
+	    			gpio_lock_reg       <= gpio_lock_reg;
+	    			debug_sel_reg       <= debug_sel_reg;
+			      end
 
-    .gpio_dir_reg   (gpio_dir_out_w),
-    .gpio_out_reg   (gpio_out_out_w),
-    .gpio_in_reg    (gpio_in_w),
+              endcase
 
-    .pinmux0        (pinmux0_out_w), //in
-    .pinmux1        (pinmux1_out_w), //in
+          end
+     end
+end
 
-    .pll_clk_fail   (pll_clk_fail_out),  //out
-    .rc_clk_fail    (rc_clk_fail_out), //out
-    .boot_load_done (boot_load_done_out), //out
+// read logic 
+always_comb
+    begin 
 
-    .uart_tx        (uart_tx_w), //in
-    .uart_rx        (uart_rx_w), //out
+    prdata  = 32'h0;
 
-    .spi_cs         (spi_cs_w), //in
-    .spi_clk        (spi_clk_w), //in
-    .spi_mosi       (spi_mosi_w), //in
-    .spi_miso       (spi_miso_w), //out
+    if (read_en) 
+        begin
+            case(paddr)
 
-    .i2c_scl        (i2c_scl_w), //in
-    .i2c_sda_out    (i2c_sda_out_w), //in
-    .i2c_sda_oe     (i2c_sda_oe_w), // in
-    .i2c_sda_in     (i2c_sda_in_w), //out
+             GPIO_DIR_ADDR        :  prdata    =     {9'd0,gpio_dir_reg};
+             GPIO_OUT_ADDR        :  prdata    =     {9'd0,gpio_out_reg};
+             GPIO_IN_ADDR         :  prdata    =     {9'd0,gpio_in};
+             
+             GPIO_PULLUP_ADDR     :  prdata    =     gpio_pullup_reg;
+             GPIO_PULLDOWN_ADDR   :  prdata    =     gpio_pulldown_reg;
+             GPIO_OPENDRAIN_ADDR  :  prdata    =     gpio_opendrain_reg;
+                                                 
+             GPIO_SCHMITT_ADDR    :  prdata    =     gpio_schmitt_reg;
+             
+             GPIO_DRV0_ADDR       :  prdata    =     gpio_drv0_reg;
+             GPIO_DRV1_ADDR       :  prdata    =     gpio_drv1_reg;
+             
+             GPIO_INT_EN_ADDR     :  prdata    =     gpio_int_en_reg;
+             GPIO_INT_STATUS_ADDR :  prdata    =     gpio_int_status_reg;                             
+             
+             GPIO_RISE_EN_ADDR    :  prdata    =     gpio_rise_en_reg;
+             GPIO_FALL_EN_ADDR    :  prdata    =     gpio_fall_en_reg;
+                                                  
+             GPIO_HIGH_EN_ADDR    :  prdata    =     gpio_high_en_reg;
+             GPIO_LOW_EN_ADDR     :  prdata    =     gpio_low_en_reg;
+                                                  
+             PINMUX0_ADDR         :  prdata    =     {2'b0,pinmux0_reg};
+             PINMUX1_ADDR         :  prdata    =     {2'b0,pinmux1_reg};
+             PINMUX2_ADDR         :  prdata    =     {23'b0,pinmux2_reg};
+                                                       
+             GPIO_LOCK_ADDR       :  prdata    =     gpio_lock_reg;
+             DEBUG_SEL_ADDR       :  prdata    =     debug_sel_reg;   
 
-    .irq_in         (irq_in_w), //out
+             default              :  prdata    =     32'h0;
 
-    .clk_out        (clk_out_w), //in
-    .debug          (debug_w), //in
+             endcase
+       end
+end
 
-    .atclk          (atclk_w), //in
-    .atvalid        (atvalid_w), //in
-    .atready        (atready_w), //in
-    .atsync         (atsync_w), //in 
+// output assignments
+assign  gpio_dir_out        = gpio_dir_reg;        
+assign  gpio_out_out        = gpio_out_reg;       
 
-    .atid           (atid_w), //in
-    .atdata         (atdata_w),  //in
+assign  gpio_pullup_out     = gpio_pullup_reg;    
+assign  gpio_pulldown_out   = gpio_pulldown_reg;  
+assign  gpio_opendrain_out  = gpio_opendrain_reg; 
 
-    .xtal_out       (xtal_out_w)
+assign  gpio_schmitt_out    = gpio_schmitt_reg;   
 
- );
+assign  gpio_drv0_out       = gpio_drv0_reg;      
+assign  gpio_drv1_out       = gpio_drv1_reg;      
 
-//gpio pad instance 
- gpio_pad gpio_pad_instance (
-    .gpio_pad_block_dir   (gpio_pad_oe_w),
-    .gpio_pad_block_in    (gpio_pad_in_w),
-    .gpio_pad_block_out   (gpio_pad_out_w),
-    .gpio_pad_out0        (gpio_out0),
-    .gpio_pad_out1        (gpio_out1),
-    .gpio_pad_out2        (gpio_out2),
-    .gpio_pad_out3        (gpio_out3),
-    .gpio_pad_out4        (gpio_out4),
-    .gpio_pad_out5        (gpio_out5),
-    .gpio_pad_out6        (gpio_out6),
-    .gpio_pad_out7        (gpio_out7),
-    .gpio_pad_out8        (gpio_out8),
-    .gpio_pad_out9        (gpio_out9),
-    .gpio_pad_out10       (gpio_out10),
-    .gpio_pad_out11       (gpio_out11),
-    .gpio_pad_out12       (gpio_out12),
-    .gpio_pad_out13       (gpio_out13),
-    .gpio_pad_out14       (gpio_out14),
-    .gpio_pad_out15       (gpio_out15),
-    .gpio_pad_out16       (gpio_out16)
-    
- );   
+assign  gpio_int_en_out     = gpio_int_en_reg;    
+assign  gpio_int_status_out = gpio_int_status_reg;
+
+assign  gpio_rise_en_out    = gpio_rise_en_reg;   
+assign  gpio_fall_en_out    = gpio_fall_en_reg;   
+
+assign  gpio_high_en_out    = gpio_high_en_reg;   
+assign  gpio_low_en_out     = gpio_low_en_reg;    
+
+assign  pinmux0_out         = pinmux0_reg;        
+assign  pinmux1_out         = pinmux1_reg;
+assign  pinmux2_out         = pinmux2_reg;   
+
+assign  gpio_lock_out       = gpio_lock_reg;      
+assign  debug_sel_out       = debug_sel_reg;      
+
 
 endmodule

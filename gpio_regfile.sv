@@ -17,9 +17,9 @@ module gpio_regfile (
 
     // signals for internal blocks
 
-    output logic [31:0] gpio_dir_out,       
-    output logic [31:0] gpio_out_out,     
-    input  logic [31:0] gpio_in,  
+    output logic [22:0] gpio_dir_out,       
+    output logic [22:0] gpio_out_out,     
+    input  logic [22:0] gpio_in,  
       
     output logic [31:0] gpio_pullup_out,
     output logic [31:0] gpio_pulldown_out,
@@ -39,24 +39,21 @@ module gpio_regfile (
     output logic [31:0] gpio_high_en_out,
     output logic [31:0] gpio_low_en_out,
     
-    output logic [31:0] pinmux0_out,
-    output logic [31:0] pinmux1_out,
+    output logic [29:0] pinmux0_out,
+    output logic [29:0] pinmux1_out,
+    output logic [8:0]  pinmux2_out,
 
     output logic [31:0] gpio_lock_out,
     output logic [31:0] debug_sel_out   
     );
 
-//internal registers
-
-assign pready = 1'b1;
-assign pslverr = 1'b0;
 
 logic read_en;
 logic write_en;
 //logic [7:0] addr;
 
-logic [31:0] gpio_dir_reg;       
-logic [31:0] gpio_out_reg;
+logic [22:0] gpio_dir_reg;       
+logic [22:0] gpio_out_reg;
 
 logic [31:0] gpio_pullup_reg;    
 logic [31:0] gpio_pulldown_reg;  
@@ -76,8 +73,9 @@ logic [31:0] gpio_fall_en_reg;
 logic [31:0] gpio_high_en_reg;   
 logic [31:0] gpio_low_en_reg;    
 
-logic [31:0] pinmux0_reg;        
-logic [31:0] pinmux1_reg;        
+logic [29:0] pinmux0_reg;        
+logic [29:0] pinmux1_reg;
+logic [8:0]  pinmux2_reg;
 
 logic [31:0] gpio_lock_reg;      
 logic [31:0] debug_sel_reg;      
@@ -111,23 +109,35 @@ localparam GPIO_FALL_EN_ADDR    = 8'h40;
 localparam GPIO_HIGH_EN_ADDR    = 8'h44;
 localparam GPIO_LOW_EN_ADDR     = 8'h48;
 
-localparam PINMUX0_ADDR         = 8'h4C;
-localparam PINMUX1_ADDR         = 8'h50;
+localparam PINMUX0_ADDR         = 8'h4C;  //0-9     pin access
+localparam PINMUX1_ADDR         = 8'h50; //10-19    pin access
+localparam PINMUX2_ADDR         = 8'h54; //20-22  pin access
 
-localparam GPIO_LOCK_ADDR       = 8'h54;
-localparam DEBUG_SEL_ADDR       = 8'h58;
+localparam GPIO_LOCK_ADDR       = 8'h58;
+localparam DEBUG_SEL_ADDR       = 8'h5C;
 
 
 assign write_en = psel & penable & pwrite;
 
 assign read_en = psel & penable & (~pwrite);
 
+assign pslverr = !( (paddr == GPIO_DIR_ADDR ) || (paddr == GPIO_OUT_ADDR)  || (paddr == GPIO_IN_ADDR ) ||
+                 (paddr ==  GPIO_PULLUP_ADDR ) ||(paddr ==  GPIO_PULLDOWN_ADDR) ||(paddr == GPIO_OPENDRAIN_ADDR ) ||
+                 (paddr == GPIO_SCHMITT_ADDR  ) ||(paddr == GPIO_DRV0_ADDR ) || (paddr == GPIO_DRV1_ADDR ) ||
+                 (paddr == GPIO_INT_EN_ADDR ) ||(paddr == GPIO_INT_STATUS_ADDR ) || (paddr ==  GPIO_SET_ADDR ) || 
+                 (paddr ==  GPIO_CLR_ADDR ) || (paddr ==  GPIO_TOGGLE_ADDR ) || (paddr ==  GPIO_RISE_EN_ADDR) ||
+                 (paddr == GPIO_FALL_EN_ADDR  )||(paddr == GPIO_HIGH_EN_ADDR ) || (paddr == GPIO_LOW_EN_ADDR )|| 
+                 (paddr == PINMUX0_ADDR  )||(paddr == PINMUX1_ADDR )|| (paddr == PINMUX2_ADDR )||
+                 (paddr == GPIO_LOCK_ADDR ) ||(paddr ==  DEBUG_SEL_ADDR )); 
+
 //write logic
 always_ff @(posedge pclk or negedge presetn) begin 
     if(!presetn) begin
 
-         gpio_dir_reg        <= 32'h0;      
-         gpio_out_reg        <= 32'h0;
+         pready               <= 1'b0;
+ 
+         gpio_dir_reg        <= 23'h0;      
+         gpio_out_reg        <= 23'h0;
          
          gpio_pullup_reg     <= 32'h0;
          gpio_pulldown_reg   <= 32'h0;
@@ -147,22 +157,25 @@ always_ff @(posedge pclk or negedge presetn) begin
          gpio_high_en_reg    <= 32'h0;
          gpio_low_en_reg     <= 32'h0;
          
-         pinmux0_reg         <= 32'h0;
-         pinmux1_reg         <= 32'h0;
+         pinmux0_reg         <= 30'h0;
+         pinmux1_reg         <= 30'h0;
+         pinmux2_reg         <= 9'h0;
          
          gpio_lock_reg       <= 32'h0;
          debug_sel_reg       <= 32'h0;
 
 end
-        else if(write_en) begin
+        else begin
+            pready          <= 1'b1;
+            if(write_en) begin
             case(paddr)
 
-             GPIO_DIR_ADDR        :    gpio_dir_reg         <=  pwdata  ;
-             GPIO_OUT_ADDR        :    gpio_out_reg         <=  pwdata  ;
+             GPIO_DIR_ADDR        :    gpio_dir_reg         <=  pwdata[22:0]  ;
+             GPIO_OUT_ADDR        :    gpio_out_reg         <=  pwdata[22:0]  ;
 
-             GPIO_SET_ADDR        :    gpio_out_reg         <=  gpio_out_reg | pwdata  ;
-             GPIO_CLR_ADDR        :    gpio_out_reg         <=  gpio_out_reg & ~pwdata ;
-             GPIO_TOGGLE_ADDR     :    gpio_out_reg         <=  gpio_out_reg ^ pwdata  ;
+             GPIO_SET_ADDR        :    gpio_out_reg         <=  gpio_out_reg | pwdata[22:0]  ;
+             GPIO_CLR_ADDR        :    gpio_out_reg         <=  gpio_out_reg & ~pwdata[22:0] ;
+             GPIO_TOGGLE_ADDR     :    gpio_out_reg         <=  gpio_out_reg ^ pwdata[22:0]  ;
 
              GPIO_PULLUP_ADDR     :    gpio_pullup_reg      <=  pwdata  ;
              GPIO_PULLDOWN_ADDR   :    gpio_pulldown_reg    <=  pwdata  ;
@@ -184,8 +197,9 @@ end
              GPIO_HIGH_EN_ADDR    :    gpio_high_en_reg     <=  pwdata  ;
              GPIO_LOW_EN_ADDR     :    gpio_low_en_reg      <=  pwdata  ;
 
-             PINMUX0_ADDR         :    pinmux0_reg          <=  pwdata  ;
-             PINMUX1_ADDR         :    pinmux1_reg          <=  pwdata  ;
+             PINMUX0_ADDR         :    pinmux0_reg          <=  pwdata[29:0]  ;
+             PINMUX1_ADDR         :    pinmux1_reg          <=  pwdata[29:0]  ;
+             PINMUX2_ADDR         :    pinmux2_reg          <=  pwdata[8:0]  ;
 
              GPIO_LOCK_ADDR       :    gpio_lock_reg        <=  pwdata  ;
              DEBUG_SEL_ADDR       :    debug_sel_reg        <=  pwdata  ;
@@ -199,7 +213,7 @@ end
 	    			gpio_schmitt_reg    <= gpio_schmitt_reg;
 	    			gpio_drv0_reg       <= gpio_drv0_reg;
 	    			gpio_drv1_reg       <= gpio_drv1_reg;
-	   			gpio_int_en_reg     <= gpio_int_en_reg;
+	   		    	gpio_int_en_reg     <= gpio_int_en_reg;
 	    			gpio_int_status_reg <= gpio_int_status_reg;
 	    			gpio_rise_en_reg    <= gpio_rise_en_reg;
 	    			gpio_fall_en_reg    <= gpio_fall_en_reg;
@@ -207,13 +221,15 @@ end
 	    			gpio_low_en_reg     <= gpio_low_en_reg;
 	    			pinmux0_reg         <= pinmux0_reg;
 	    			pinmux1_reg         <= pinmux1_reg;
+                    pinmux2_reg         <= pinmux2_reg;
 	    			gpio_lock_reg       <= gpio_lock_reg;
 	    			debug_sel_reg       <= debug_sel_reg;
-			end
+			      end
 
-             endcase
+              endcase
 
-            end
+          end
+     end
 end
 
 // read logic 
@@ -226,9 +242,9 @@ always_comb
         begin
             case(paddr)
 
-             GPIO_DIR_ADDR        :  prdata    =     gpio_dir_reg;
-             GPIO_OUT_ADDR        :  prdata    =     gpio_out_reg;
-             GPIO_IN_ADDR         :  prdata    =     gpio_in;
+             GPIO_DIR_ADDR        :  prdata    =     {9'd0,gpio_dir_reg};
+             GPIO_OUT_ADDR        :  prdata    =     {9'd0,gpio_out_reg};
+             GPIO_IN_ADDR         :  prdata    =     {9'd0,gpio_in};
              
              GPIO_PULLUP_ADDR     :  prdata    =     gpio_pullup_reg;
              GPIO_PULLDOWN_ADDR   :  prdata    =     gpio_pulldown_reg;
@@ -248,8 +264,9 @@ always_comb
              GPIO_HIGH_EN_ADDR    :  prdata    =     gpio_high_en_reg;
              GPIO_LOW_EN_ADDR     :  prdata    =     gpio_low_en_reg;
                                                   
-             PINMUX0_ADDR         :  prdata    =     pinmux0_reg;
-             PINMUX1_ADDR         :  prdata    =     pinmux1_reg;
+             PINMUX0_ADDR         :  prdata    =     {2'b0,pinmux0_reg};
+             PINMUX1_ADDR         :  prdata    =     {2'b0,pinmux1_reg};
+             PINMUX2_ADDR         :  prdata    =     {23'b0,pinmux2_reg};
                                                        
              GPIO_LOCK_ADDR       :  prdata    =     gpio_lock_reg;
              DEBUG_SEL_ADDR       :  prdata    =     debug_sel_reg;   
@@ -283,7 +300,8 @@ assign  gpio_high_en_out    = gpio_high_en_reg;
 assign  gpio_low_en_out     = gpio_low_en_reg;    
 
 assign  pinmux0_out         = pinmux0_reg;        
-assign  pinmux1_out         = pinmux1_reg;        
+assign  pinmux1_out         = pinmux1_reg;
+assign  pinmux2_out         = pinmux2_reg;   
 
 assign  gpio_lock_out       = gpio_lock_reg;      
 assign  debug_sel_out       = debug_sel_reg;      
