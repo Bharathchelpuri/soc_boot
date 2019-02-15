@@ -1,0 +1,13 @@
+//
+// File created by:  irun
+// Do not modify this file
+//
+-access
++rwc
+analog_io_pad.sv
+digital_io_pad.sv
+gpio_io_pad.sv
+io_pad_config.svh
+io_pdk_cells.sv
+power_io_pad.sv
+top_io_pad.sv

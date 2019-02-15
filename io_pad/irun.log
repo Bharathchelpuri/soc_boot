@@ -1,0 +1,236 @@
+irun(64): 15.20-s051: (c) Copyright 1995-2018 Cadence Design Systems, Inc.
+TOOL:	irun(64)	15.20-s051: Started on Feb 14, 2019 at 00:01:56 IST
+irun
+	-access +rwc
+	analog_io_pad.sv
+	digital_io_pad.sv
+	gpio_io_pad.sv
+	io_pad_config.svh
+	io_pdk_cells.sv
+	power_io_pad.sv
+	top_io_pad.sv
+DEFINE gpdk045		$ANALOG/45nm/gpdk045		
+|
+irun: *W,DLCPTH (/tools/cadence/FOUNDRY/cds.lib,15): cds.lib Permission denied '/tools/cadence/FOUNDRY/analog/45nm/gpdk045' (cds.lib command ignored).
+DEFINE rfLib_new	/home/install/FOUNDRY/rfLib_new
+|
+irun: *W,DLCPTH (/tools/cadence/FOUNDRY/cds.lib,19): cds.lib Invalid path '/home/install/FOUNDRY/rfLib_new' (cds.lib command ignored).
+DEFINE gpdk045		$ANALOG/45nm/gpdk045		
+|
+irun: *W,DLCPTH (/tools/cadence/FOUNDRY/cds.lib,15): cds.lib Permission denied '/tools/cadence/FOUNDRY/analog/45nm/gpdk045' (cds.lib command ignored).
+DEFINE rfLib_new	/home/install/FOUNDRY/rfLib_new
+|
+irun: *W,DLCPTH (/tools/cadence/FOUNDRY/cds.lib,19): cds.lib Invalid path '/home/install/FOUNDRY/rfLib_new' (cds.lib command ignored).
+DEFINE gpdk045		$ANALOG/45nm/gpdk045		
+|
+irun: *W,DLCPTH (/tools/cadence/FOUNDRY/cds.lib,15): cds.lib Permission denied '/tools/cadence/FOUNDRY/analog/45nm/gpdk045' (cds.lib command ignored).
+DEFINE rfLib_new	/home/install/FOUNDRY/rfLib_new
+|
+irun: *W,DLCPTH (/tools/cadence/FOUNDRY/cds.lib,19): cds.lib Invalid path '/home/install/FOUNDRY/rfLib_new' (cds.lib command ignored).
+DEFINE gpdk045		$ANALOG/45nm/gpdk045		
+|
+irun: *W,DLCPTH (/tools/cadence/FOUNDRY/cds.lib,15): cds.lib Permission denied '/tools/cadence/FOUNDRY/analog/45nm/gpdk045' (cds.lib command ignored).
+DEFINE rfLib_new	/home/install/FOUNDRY/rfLib_new
+|
+irun: *W,DLCPTH (/tools/cadence/FOUNDRY/cds.lib,19): cds.lib Invalid path '/home/install/FOUNDRY/rfLib_new' (cds.lib command ignored).
+DEFINE gpdk045		$ANALOG/45nm/gpdk045		
+|
+irun: *W,DLCPTH (/tools/cadence/FOUNDRY/cds.lib,15): cds.lib Permission denied '/tools/cadence/FOUNDRY/analog/45nm/gpdk045' (cds.lib command ignored).
+DEFINE rfLib_new	/home/install/FOUNDRY/rfLib_new
+|
+irun: *W,DLCPTH (/tools/cadence/FOUNDRY/cds.lib,19): cds.lib Invalid path '/home/install/FOUNDRY/rfLib_new' (cds.lib command ignored).
+DEFINE gpdk045		$ANALOG/45nm/gpdk045		
+|
+ncvlog: *W,DLCPTH (/tools/cadence/FOUNDRY/cds.lib,15): cds.lib Permission denied '/tools/cadence/FOUNDRY/analog/45nm/gpdk045' (cds.lib command ignored).
+DEFINE rfLib_new	/home/install/FOUNDRY/rfLib_new
+|
+ncvlog: *W,DLCPTH (/tools/cadence/FOUNDRY/cds.lib,19): cds.lib Invalid path '/home/install/FOUNDRY/rfLib_new' (cds.lib command ignored).
+file: analog_io_pad.sv
+`include "../rtl/common/io_pad/io_pad_config.svh"
+                                                |
+ncvlog: *E,COFILX (analog_io_pad.sv,1|48): cannot open include file '../rtl/common/io_pad/io_pad_config.svh'.
+    `ANALOG_P_CELL u_vdd_1_8 (
+                 |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,38|17): `ANALOG_P_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `ANALOG_P_CELL u_vdd_2_5 (
+                 |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,42|17): `ANALOG_P_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `ANALOG_IO_CELL u_ana0 (
+                  |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,46|18): `ANALOG_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `ANALOG_IO_CELL u_ana1 (
+                  |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,50|18): `ANALOG_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `ANALOG_IO_CELL u_ana2 (
+                  |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,54|18): `ANALOG_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `ANALOG_IO_CELL u_ana3 (
+                  |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,58|18): `ANALOG_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `ANALOG_IO_CELL u_ana4 (
+                  |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,62|18): `ANALOG_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `ANALOG_IO_CELL u_ana5 (
+                  |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,66|18): `ANALOG_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `ANALOG_IO_CELL u_ana6 (
+                  |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,70|18): `ANALOG_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `ANALOG_IO_CELL u_ana7 (
+                  |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,74|18): `ANALOG_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `ANALOG_IO_CELL u_ana8 (
+                  |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,78|18): `ANALOG_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `ANALOG_IO_CELL u_ana9 (
+                  |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,82|18): `ANALOG_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `ANALOG_IO_CELL u_adc_in (
+                  |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,86|18): `ANALOG_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `ANALOG_IO_CELL u_dac_out (
+                  |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,90|18): `ANALOG_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `ANALOG_IO_CELL u_ldo_1_2_acap (
+                  |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,94|18): `ANALOG_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `ANALOG_IO_CELL u_ldo_1_2_dcap (
+                  |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,98|18): `ANALOG_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `ANALOG_IO_CELL u_ldo_1_8_acap (
+                  |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,102|18): `ANALOG_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `ANALOG_IO_CELL u_ldo_1_8_dcap (
+                  |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,106|18): `ANALOG_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `ANALOG_IO_CELL u_ldo_2_5_acap (
+                  |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,110|18): `ANALOG_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `ANALOG_IO_CELL u_ldo_2_5_dcap (
+                  |
+ncvlog: *E,NOTDIR (analog_io_pad.sv,114|18): `ANALOG_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+	module worklib.analog_io_pad:sv
+		errors: 20, warnings: 0
+file: digital_io_pad.sv
+`include "../rtl/common/io_pad/io_pad_config.svh"
+                                                |
+ncvlog: *E,COFILX (digital_io_pad.sv,1|48): cannot open include file '../rtl/common/io_pad/io_pad_config.svh'.
+    `DIGITAL_IO_CELL u_tck (
+                   |
+ncvlog: *E,NOTDIR (digital_io_pad.sv,20|19): `DIGITAL_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `DIGITAL_IO_CELL u_tms (
+                   |
+ncvlog: *E,NOTDIR (digital_io_pad.sv,30|19): `DIGITAL_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `DIGITAL_IO_CELL u_tdi (
+                   |
+ncvlog: *E,NOTDIR (digital_io_pad.sv,40|19): `DIGITAL_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `DIGITAL_IO_CELL u_trst (
+                   |
+ncvlog: *E,NOTDIR (digital_io_pad.sv,50|19): `DIGITAL_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `DIGITAL_IO_CELL u_tdo (
+                   |
+ncvlog: *E,NOTDIR (digital_io_pad.sv,60|19): `DIGITAL_IO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+	module worklib.digital_io_pad:sv
+		errors: 5, warnings: 0
+file: gpio_io_pad.sv
+`include "../rtl/common/io_pad/io_pad_config.svh"
+                                                |
+ncvlog: *E,COFILX (gpio_io_pad.sv,1|48): cannot open include file '../rtl/common/io_pad/io_pad_config.svh'.
+    `GPIO_SDA_CELL u_gpio_pad0 (
+                 |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,40|17): `GPIO_SDA_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad1 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,54|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad2 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,68|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad3 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,82|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad4 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,96|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad5 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,110|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad6 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,124|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad7 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,138|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad8 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,152|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad9 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,166|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad10 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,180|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad11 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,194|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad12 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,208|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad13 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,222|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad14 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,236|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad15 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,250|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad16 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,264|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad17 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,278|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad18 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,292|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad19 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,306|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad20 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,320|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad21 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,334|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+    `GPIO_CELL u_gpio_pad22 (
+             |
+ncvlog: *E,NOTDIR (gpio_io_pad.sv,348|13): `GPIO_CELL: not a recognized directive or macro [2.7.3][16.3.1][16(IEEE)].
+	module worklib.gpio_io_pad:sv
+		errors: 23, warnings: 0
+file: io_pad_config.svh
+file: io_pdk_cells.sv
+	module worklib.PDB3A:sv
+		errors: 0, warnings: 0
+	module worklib.PVDD2CDG:sv
+		errors: 0, warnings: 0
+	module worklib.PVSS2CDG:sv
+		errors: 0, warnings: 0
+	module worklib.PXOE1CDG:sv
+		errors: 0, warnings: 0
+	module worklib.PRDW0408CDG:sv
+		errors: 0, warnings: 0
+	module worklib.PRUW0408CDG:sv
+		errors: 0, warnings: 0
+file: power_io_pad.sv
+`include "../rtl/common/io_pad/io_pad_config.svh"
+                                                |
+ncvlog: *E,COFILX (power_io_pad.sv,2|48): cannot open include file '../rtl/common/io_pad/io_pad_config.svh'.
+	module worklib.power_io_pad:sv
+		errors: 0, warnings: 0
+file: top_io_pad.sv
+	module worklib.top_io_pad:sv
+		errors: 0, warnings: 0
+	Total errors/warnings found outside modules and primitives:
+		errors: 1, warnings: 2
+irun: *E,VLGERR: An error occurred during parsing.  Review the log file for errors with the code *E and fix those identified problems to proceed.  Exiting with code (status 1).
+TOOL:	irun(64)	15.20-s051: Exiting on Feb 14, 2019 at 00:01:57 IST  (total: 00:00:01)

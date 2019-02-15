@@ -1,9 +1,10 @@
-`include "io_pad_config.svh"
+`include "../rtl/common/io_pad/io_pad_config.svh"
 
 module gpio_io_pad (
     // Signals from GPIO block
     input  logic [22:0] gpio_pad_block_dir,
     input  logic [22:0] gpio_pad_block_out,
+    input  logic [22:0] gpio_pull_en,
     output logic [22:0] gpio_pad_block_in,
 
     // Physical GPIO pads
@@ -42,7 +43,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[0]),
         .PAD (gpio_pad_out0),
         .C   (gpio_pad_block_in[0]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[0]),
         .IE  (1'b1)
     );
 
@@ -56,7 +57,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[1]),
         .PAD (gpio_pad_out1),
         .C   (gpio_pad_block_in[1]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[1]),
         .IE  (1'b1)
     );
 
@@ -70,7 +71,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[2]),
         .PAD (gpio_pad_out2),
         .C  (gpio_pad_block_in[2]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[2]),
         .IE  (1'b1)
     );
 
@@ -84,7 +85,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[3]),
         .PAD (gpio_pad_out3),
         .C   (gpio_pad_block_in[3]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[3]),
         .IE  (1'b1)
     );
 
@@ -98,7 +99,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[4]),
         .PAD (gpio_pad_out4),
         .C   (gpio_pad_block_in[4]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[4]),
         .IE  (1'b1)
     );
 
@@ -112,7 +113,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[5]),
         .PAD (gpio_pad_out5),
         .C   (gpio_pad_block_in[5]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[5]),
         .IE  (1'b1)
     );
 
@@ -126,7 +127,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[6]),
         .PAD (gpio_pad_out6),
         .C   (gpio_pad_block_in[6]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[6]),
         .IE  (1'b1)
     );
 
@@ -140,7 +141,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[7]),
         .PAD (gpio_pad_out7),
         .C   (gpio_pad_block_in[7]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[7]),
         .IE  (1'b1)
     );
 
@@ -154,7 +155,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[8]),
         .PAD (gpio_pad_out8),
         .C   (gpio_pad_block_in[8]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[8]),
         .IE  (1'b1)
     );
 
@@ -168,7 +169,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[9]),
         .PAD (gpio_pad_out9),
         .C   (gpio_pad_block_in[9]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[9]),
         .IE  (1'b1)
     );
 
@@ -182,7 +183,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[10]),
         .PAD (gpio_pad_out10),
         .C   (gpio_pad_block_in[10]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[10]),
         .IE  (1'b1)
     );
 
@@ -196,7 +197,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[11]),
         .PAD (gpio_pad_out11),
         .C   (gpio_pad_block_in[11]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[11]),
         .IE  (1'b1)
     );
 
@@ -210,7 +211,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[12]),
         .PAD (gpio_pad_out12),
         .C   (gpio_pad_block_in[12]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[12]),
         .IE  (1'b1)
     );
 
@@ -224,7 +225,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[13]),
         .PAD (gpio_pad_out13),
         .C   (gpio_pad_block_in[13]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[13]),
         .IE  (1'b1)
     );
 
@@ -238,7 +239,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[14]),
         .PAD (gpio_pad_out14),
         .C   (gpio_pad_block_in[14]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[14]),
         .IE  (1'b1)
     );
 
@@ -252,7 +253,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[15]),
         .PAD (gpio_pad_out15),
         .C   (gpio_pad_block_in[15]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[15]),
         .IE  (1'b1)
     );
 
@@ -266,7 +267,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[16]),
         .PAD (gpio_pad_out16),
         .C   (gpio_pad_block_in[16]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[16]),
         .IE  (1'b1)
     );
 
@@ -280,7 +281,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[17]),
         .PAD (gpio_pad_out17),
         .C   (gpio_pad_block_in[17]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[17]),
         .IE  (1'b1)
     );
 
@@ -294,7 +295,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[18]),
         .PAD (gpio_pad_out18),
         .C   (gpio_pad_block_in[18]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[18]),
         .IE  (1'b1)
     );
 
@@ -308,7 +309,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[19]),
         .PAD (gpio_pad_out19),
         .C   (gpio_pad_block_in[19]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[19]),
         .IE  (1'b1)
     );
 
@@ -322,7 +323,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[20]),
         .PAD (gpio_pad_out20),
         .C   (gpio_pad_block_in[20]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[20]),
         .IE  (1'b1)
     );
 
@@ -336,7 +337,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[21]),
         .PAD (gpio_pad_out21),
         .C   (gpio_pad_block_in[21]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[21]),
         .IE  (1'b1)
     );
 
@@ -350,7 +351,7 @@ module gpio_io_pad (
         .OEN (~gpio_pad_block_dir[22]),
         .PAD (gpio_pad_out22),
         .C   (gpio_pad_block_in[22]),
-        .PE  (1'b0),
+        .PE  (gpio_pull_en[22]),
         .IE  (1'b1)
     );
 

@@ -19,17 +19,16 @@ input logic    ana2dig_dbg3,
 input logic    ana2dig_dbg4,
 input logic    ana2dig_dbg5,
 input logic    ana2dig_dbg6,
-input logic    ana2dig_dbg7,
 input logic    boot_dbg1,
 input logic    boot_dbg2,
+input logic    boot_dbg3,
 input logic    dob_valid,
 input logic    atvalid,
-input logic    boot_dbg3,
-input logic    clk_out,
 input logic    boot_dbg4,
+input logic    clk_out,
+input logic    boot_dbg5,
 input logic    dob_trigger,
 input logic    atclk,
-input logic    boot_dbg5,
 input logic    boot_dbg6,
 input logic    afready,
 input logic [15:0] atdata,
@@ -731,7 +730,7 @@ case(func_sel[14])
 
      PINMUX_PRIMARY:
     begin
-        gpio_pad_out[14] = ana2dig_dbg7;
+        gpio_pad_out[14] = boot_dbg1;
         gpio_pad_oe[14]  = 1'b1;
     end
 
@@ -778,7 +777,7 @@ case(func_sel[15])
 
      PINMUX_PRIMARY:
     begin
-        gpio_pad_out[15] = boot_dbg1;
+        gpio_pad_out[15] = boot_dbg2;
         gpio_pad_oe[15]  = 1'b1;
     end
 
@@ -825,7 +824,7 @@ case(func_sel[16])
 
      PINMUX_PRIMARY:
     begin
-        gpio_pad_out[16] = boot_dbg2;
+        gpio_pad_out[16] = boot_dbg3;
         gpio_pad_oe[16]  = 1'b1;
     end
 
@@ -872,7 +871,7 @@ case(func_sel[17])
 
      PINMUX_PRIMARY:
     begin
-        gpio_pad_out[17] = boot_dbg3;
+        gpio_pad_out[17] = boot_dbg4;
         gpio_pad_oe[17]  = 1'b1;
     end
 
@@ -919,7 +918,7 @@ case(func_sel[18])
 
      PINMUX_PRIMARY:
     begin
-        gpio_pad_out[18] = boot_dbg4;
+        gpio_pad_out[18] = boot_dbg5;
         gpio_pad_oe[18]  = 1'b1;
     end
 
@@ -966,7 +965,7 @@ case(func_sel[19])
 
      PINMUX_PRIMARY:
     begin
-        gpio_pad_out[19] = boot_dbg5;
+        gpio_pad_out[19] = boot_dbg6;
         gpio_pad_oe[19]  = 1'b1;
     end
 
@@ -1018,8 +1017,13 @@ case(func_sel[20])
 
      PINMUX_PRIMARY:
     begin
-        gpio_pad_out[20] = boot_dbg6;
-        gpio_pad_oe[20]  = 1'b1;
+        if (gpio_dir_reg[20]) begin
+            gpio_pad_out[20] = gpio_out_reg[20];
+            gpio_pad_oe[20]  = gpio_dir_reg[20];
+        end
+        else begin
+            gpio_in_reg[20] = gpio_pad_in[20];
+        end
     end
 
      PINMUX_PERIPHERAL:

@@ -1,5 +1,5 @@
 
-`include "io_pad_config.svh"
+`include "../rtl/common/io_pad/io_pad_config.svh"
 
 module power_io_pad (
 

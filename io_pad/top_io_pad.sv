@@ -82,9 +82,10 @@ module top_io_pad (
     //========================================================
     // GPIO CORE INTERFACE
     //========================================================
-    input  logic [22:0] gpio_pad_dir,
-    input  logic [22:0] gpio_pad_in,
-    output logic [22:0] gpio_pad_out,
+    input   logic [22:0] gpio_pad_dir,
+    output  logic [22:0] gpio_pad_in,
+    input   logic [22:0] gpio_pad_out,
+    input   logic [22:0] gpio_pad_pull_en,
 
     //========================================================
     // JTAG
@@ -106,31 +107,32 @@ gpio_io_pad u_gpio_io_pad (
     .gpio_pad_block_dir   (gpio_pad_dir),
     .gpio_pad_block_in    (gpio_pad_in),
     .gpio_pad_block_out   (gpio_pad_out),
+    .gpio_pull_en         (gpio_pad_pull_en),
 
     // Physical GPIO pads
-    .gpio_pad_out0  (gpio_pad_bto0),
-    .gpio_pad_out1  (gpio_pad_bto1),
-    .gpio_pad_out2  (gpio_pad_bto2),
-    .gpio_pad_out3  (gpio_pad_bto3),
-    .gpio_pad_out4  (gpio_pad_bto4),
-    .gpio_pad_out5  (gpio_pad_bto5),
-    .gpio_pad_out6  (gpio_pad_bto6),
-    .gpio_pad_out7  (gpio_pad_bto7),
-    .gpio_pad_out8  (gpio_pad_bto8),
-    .gpio_pad_out9  (gpio_pad_bto9),
-    .gpio_pad_out10 (gpio_pad_bto10),
-    .gpio_pad_out11 (gpio_pad_bto11),
-    .gpio_pad_out12 (gpio_pad_bto12),
-    .gpio_pad_out13 (gpio_pad_bto13),
-    .gpio_pad_out14 (gpio_pad_bto14),
-    .gpio_pad_out15 (gpio_pad_bto15),
-    .gpio_pad_out16 (gpio_pad_bto16),
-    .gpio_pad_out17 (gpio_pad_bto17),
-    .gpio_pad_out18 (gpio_pad_bto18),
-    .gpio_pad_out19 (gpio_pad_bto19),
-    .gpio_pad_out20 (gpio_pad_bto20),
-    .gpio_pad_out21 (gpio_pad_bto21),
-    .gpio_pad_out22 (gpio_pad_bto22)
+    .gpio_pad_out0  (GPIO0),
+    .gpio_pad_out1  (GPIO1),
+    .gpio_pad_out2  (GPIO2),
+    .gpio_pad_out3  (GPIO3),
+    .gpio_pad_out4  (GPIO4),
+    .gpio_pad_out5  (GPIO5),
+    .gpio_pad_out6  (GPIO6),
+    .gpio_pad_out7  (GPIO7),
+    .gpio_pad_out8  (GPIO8),
+    .gpio_pad_out9  (GPIO9),
+    .gpio_pad_out10 (GPIO10),
+    .gpio_pad_out11 (GPIO11),
+    .gpio_pad_out12 (GPIO12),
+    .gpio_pad_out13 (GPIO13),
+    .gpio_pad_out14 (GPIO14),
+    .gpio_pad_out15 (GPIO15),
+    .gpio_pad_out16 (GPIO16),
+    .gpio_pad_out17 (GPIO17),
+    .gpio_pad_out18 (GPIO18),
+    .gpio_pad_out19 (GPIO19),
+    .gpio_pad_out20 (GPIO20),
+    .gpio_pad_out21 (GPIO21),
+    .gpio_pad_out22 (GPIO22)
 );
 
 // DIGITAL IO PAD
