@@ -22,7 +22,7 @@ module gpio_regfile (
     input  logic [31:0] gpio_in,  
     
     
-    output logic [31:0] gpio_setout,
+    output logic [31:0] gpio_set_out,
     
     output logic [31:0] gpio_clr_out,
     output logic [31:0] gpio_toggle_out,
@@ -54,14 +54,15 @@ module gpio_regfile (
 //internal registers
 
 assign pready = 1'b1;
-assign slverr = 1'b0;
+assign pslverr = 1'b0;
 
 logic read_en;
 logic write_en;
+logic [7:0] addr;
 
 logic [31:0] gpio_dir_reg;       
 logic [31:0] gpio_out_reg;
-logic [31:0] gpio_in_reg;
+//logic [31:0] gpio_in_reg;
 
 logic [31:0] gpio_set_reg;       
 logic [31:0] gpio_clr_reg;       
@@ -131,6 +132,8 @@ assign write_en = psel & penable & pwrite;
 
 assign read_en = psel & penable & (~pwrite);
 
+assign addr = paddr[7:0];
+
 //write logic
 always@(posedge pclk or negedge presetn) begin 
     if(!presetn) begin
@@ -168,14 +171,14 @@ always@(posedge pclk or negedge presetn) begin
 
 end
         else if(write_en) begin
-            case(paddr)
+            case(addr)
 
              GPIO_DIR_ADDR        :    gpio_dir_reg         <=  pwdata  ;
              GPIO_OUT_ADDR        :    gpio_out_reg         <=  pwdata  ;
 
-             GPIO_SET_ADDR        :    gpio_set_reg         <=  gpio_out_reg | pwdata  ;
-             GPIO_CLR_ADDR        :    gpio_clr_reg         <=  gpio_out_reg & ~pwdata ;
-             GPIO_TOGGLE_ADDR     :    gpio_toggle_reg      <=  gpio_out_reg ^ pwdata  ;
+             GPIO_SET_ADDR        :    gpio_out_reg         <=  gpio_out_reg | pwdata  ;
+             GPIO_CLR_ADDR        :    gpio_out_reg         <=  gpio_out_reg & ~pwdata ;
+             GPIO_TOGGLE_ADDR     :    gpio_out_reg         <=  gpio_out_reg ^ pwdata  ;
 
              GPIO_PULLUP_ADDR     :    gpio_pullup_reg      <=  pwdata  ;
              GPIO_PULLDOWN_ADDR   :    gpio_pulldown_reg    <=  pwdata  ;
@@ -209,11 +212,14 @@ end
 // read logic 
 always_comb
     begin 
-            case(paddr)
+
+    if (read_en) 
+        begin
+            case(addr)
 
              GPIO_DIR_ADDR        :  prdata    =     gpio_dir_reg;
              GPIO_OUT_ADDR        :  prdata    =     gpio_out_reg;
-             GPIO_IN_ADDR         :  prdata    =     gpio_in_reg;
+             GPIO_IN_ADDR         :  prdata    =     gpio_in;
              
              GPIO_PULLUP_ADDR     :  prdata    =     gpio_pullup_reg;
              GPIO_PULLDOWN_ADDR   :  prdata    =     gpio_pulldown_reg;
@@ -242,6 +248,7 @@ always_comb
              default              :  prdata    =     32'h0;
 
              endcase
+       end
 end
 
 // output assignments
