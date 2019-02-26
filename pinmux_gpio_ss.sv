@@ -1,4 +1,4 @@
-module pinaka_gpio_subsystem
+module pinmux_gpio_ss
 (
 //////////////////////////////////////////////////////
 /////// GPIO PADS
@@ -40,6 +40,7 @@ module pinaka_gpio_subsystem
 //////////////////////////////////////////////////////
     input   logic           i2c_scl,
     input   logic           i2c_sda_out,
+    input   logic           i2c_sda_oe,
     output  logic           i2c_sda_in,
 
 //////////////////////////////////////////////////////
@@ -62,7 +63,7 @@ module pinaka_gpio_subsystem
     input   logic           atsync,
 
     input   logic   [2:0]   atid,
-    input   logic   [31:0]  atdata
+    input   logic   [15:0]  atdata
 
 );
 
@@ -142,7 +143,7 @@ always_comb begin
         end
 
         PINMUX_IRQ:
-            irq0 = gpio_pad_in[0];
+            irq_in[0] = gpio_pad_in[0];
 
         PINMUX_DEBUG:
         begin
@@ -175,7 +176,7 @@ always_comb begin
             uart_rx = gpio_pad_in[1];
     
         PINMUX_IRQ:
-            irq1 = gpio_pad_in[1];
+            irq_in[1] = gpio_pad_in[1];
     
         PINMUX_DEBUG:
         begin
@@ -210,7 +211,7 @@ always_comb begin
         end
 
         PINMUX_IRQ:
-            irq2 = gpio_pad_in[2];
+            irq_in[2] = gpio_pad_in[2];
 
         PINMUX_DEBUG:
         begin
@@ -242,7 +243,7 @@ always_comb begin
             spi_miso = gpio_pad_in[3];
     
         PINMUX_IRQ:
-            irq3 = gpio_pad_in[3];
+            irq_in[3] = gpio_pad_in[3];
     
         PINMUX_DEBUG:
         begin
@@ -277,7 +278,7 @@ always_comb begin
         end
     
         PINMUX_IRQ:
-            irq4 = gpio_pad_in[4];
+            irq_in[4] = gpio_pad_in[4];
     
         PINMUX_DEBUG:
         begin
@@ -307,12 +308,12 @@ always_comb begin
     
         PINMUX_PERIPHERAL:
         begin
-            gpio_pad_out[5] = spi_cs0;
+            gpio_pad_out[5] = spi_cs;
             gpio_pad_oe [5] = 1'b1;
         end
     
         PINMUX_IRQ:
-            irq5 = gpio_pad_in[5];
+            irq_in[5] = gpio_pad_in[5];
     
         PINMUX_DEBUG:
         begin
@@ -343,11 +344,11 @@ always_comb begin
         PINMUX_PERIPHERAL:
         begin
             gpio_pad_out[6] = i2c_sda_out;
-            gpio_pad_oe [6] = 1'b1;
+            gpio_pad_oe [6] = i2c_sda_oe;
         end
     
         PINMUX_IRQ:
-            irq6 = gpio_pad_in[6];
+            irq_in[6] = gpio_pad_in[6];
     
         PINMUX_DEBUG:
         begin
@@ -376,10 +377,10 @@ always_comb begin
         end
     
         PINMUX_PERIPHERAL:
-            i2c_sda_in = gpio_pad_in[7];
+            i2c_sda_in = i2c_scl;
     
         PINMUX_IRQ:
-            irq7 = gpio_pad_in[7];
+            irq_in[7] = gpio_pad_in[7];
     
         PINMUX_DEBUG:
         begin
@@ -409,12 +410,12 @@ always_comb begin
     
         PINMUX_PERIPHERAL:
         begin
-            gpio_pad_out[8] = i2c_scl;
+            gpio_pad_out[8] = gpio_out_reg[8];
             gpio_pad_oe [8] = 1'b1;
         end
     
         PINMUX_IRQ:
-            irq8 = gpio_pad_in[8];
+            irq_in[8] = gpio_pad_in[8];
     
         PINMUX_DEBUG:
         begin
@@ -449,7 +450,7 @@ always_comb begin
         end
     
         PINMUX_IRQ:
-            irq9 = gpio_pad_in[9];
+            irq_in[9] = gpio_pad_in[9];
     
         PINMUX_DEBUG:
         begin
@@ -484,7 +485,7 @@ always_comb begin
         end
     
         PINMUX_IRQ:
-            irq10 = gpio_pad_in[10];
+            irq_in[10] = gpio_pad_in[10];
     
         PINMUX_DEBUG:
         begin
@@ -519,7 +520,7 @@ always_comb begin
         end
     
         PINMUX_IRQ:
-            irq11 = gpio_pad_in[11];
+            irq_in[11] = gpio_pad_in[11];
     
         PINMUX_DEBUG:
         begin
@@ -554,7 +555,7 @@ always_comb begin
         end
     
         PINMUX_IRQ:
-            irq12 = gpio_pad_in[12];
+            irq_in[12] = gpio_pad_in[12];
     
         PINMUX_DEBUG:
         begin
@@ -589,7 +590,7 @@ always_comb begin
         end
     
         PINMUX_IRQ:
-            irq13 = gpio_pad_in[13];
+            irq_in[13] = gpio_pad_in[13];
     
         PINMUX_DEBUG:
         begin
@@ -624,7 +625,7 @@ always_comb begin
         end
     
         PINMUX_IRQ:
-            irq14 = gpio_pad_in[14];
+            irq_in[14] = gpio_pad_in[14];
     
         PINMUX_DEBUG:
         begin

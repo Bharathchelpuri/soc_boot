@@ -4,7 +4,7 @@ module gpio_regfile (
     input logic           pclk,
     input logic           presetn,
 
-    input logic [31:0]    paddr,
+    input logic [7:0]    paddr,
     input logic           pwrite,
     input logic [31:0]    pwdata,
 
@@ -20,13 +20,7 @@ module gpio_regfile (
     output logic [31:0] gpio_dir_out,       
     output logic [31:0] gpio_out_out,     
     input  logic [31:0] gpio_in,  
-    
-    
-    output logic [31:0] gpio_set_out,
-    
-    output logic [31:0] gpio_clr_out,
-    output logic [31:0] gpio_toggle_out,
-    
+      
     output logic [31:0] gpio_pullup_out,
     output logic [31:0] gpio_pulldown_out,
     output logic [31:0] gpio_opendrain_out,
@@ -41,6 +35,7 @@ module gpio_regfile (
     
     output logic [31:0] gpio_rise_en_out,
     output logic [31:0] gpio_fall_en_out,
+    
     output logic [31:0] gpio_high_en_out,
     output logic [31:0] gpio_low_en_out,
     
@@ -58,15 +53,10 @@ assign pslverr = 1'b0;
 
 logic read_en;
 logic write_en;
-logic [7:0] addr;
+//logic [7:0] addr;
 
 logic [31:0] gpio_dir_reg;       
 logic [31:0] gpio_out_reg;
-//logic [31:0] gpio_in_reg;
-
-logic [31:0] gpio_set_reg;       
-logic [31:0] gpio_clr_reg;       
-logic [31:0] gpio_toggle_reg;    
 
 logic [31:0] gpio_pullup_reg;    
 logic [31:0] gpio_pulldown_reg;  
@@ -132,7 +122,7 @@ assign write_en = psel & penable & pwrite;
 
 assign read_en = psel & penable & (~pwrite);
 
-assign addr = paddr[7:0];
+//assign addr = paddr[7:0];
 
 //write logic
 always@(posedge pclk or negedge presetn) begin 
@@ -140,10 +130,6 @@ always@(posedge pclk or negedge presetn) begin
 
          gpio_dir_reg        <= 32'h0;      
          gpio_out_reg        <= 32'h0;
-         
-         gpio_set_reg        <= 32'h0;
-         gpio_clr_reg        <= 32'h0;
-         gpio_toggle_reg     <= 32'h0;
          
          gpio_pullup_reg     <= 32'h0;
          gpio_pulldown_reg   <= 32'h0;
@@ -171,7 +157,7 @@ always@(posedge pclk or negedge presetn) begin
 
 end
         else if(write_en) begin
-            case(addr)
+            case(paddr)
 
              GPIO_DIR_ADDR        :    gpio_dir_reg         <=  pwdata  ;
              GPIO_OUT_ADDR        :    gpio_out_reg         <=  pwdata  ;
@@ -190,6 +176,8 @@ end
              GPIO_DRV1_ADDR       :    gpio_drv1_reg        <=  pwdata  ;
 
              GPIO_INT_EN_ADDR     :    gpio_int_en_reg      <=  pwdata  ;
+             // updated by the gpio interupt , currently only cleared by the apb interface
+             //                     gpio_int_status_reg  <=  gpio_int_status_reg | gpio_interupt ;
              GPIO_INT_CLR_ADDR    :    gpio_int_status_reg  <=  gpio_int_status_reg & ~pwdata ;
 
              GPIO_RISE_EN_ADDR    :    gpio_rise_en_reg     <=  pwdata  ;
@@ -204,6 +192,9 @@ end
              GPIO_LOCK_ADDR       :    gpio_lock_reg        <=  pwdata  ;
              DEBUG_SEL_ADDR       :    debug_sel_reg        <=  pwdata  ;
 
+             default              : begin
+             end
+
              endcase
 
             end
@@ -213,9 +204,11 @@ end
 always_comb
     begin 
 
+    prdata  = 32'h0;
+
     if (read_en) 
         begin
-            case(addr)
+            case(paddr)
 
              GPIO_DIR_ADDR        :  prdata    =     gpio_dir_reg;
              GPIO_OUT_ADDR        :  prdata    =     gpio_out_reg;
@@ -254,10 +247,6 @@ end
 // output assignments
 assign  gpio_dir_out        = gpio_dir_reg;        
 assign  gpio_out_out        = gpio_out_reg;       
-
-assign  gpio_set_out        = gpio_set_reg;       
-assign  gpio_clr_out        = gpio_clr_reg;       
-assign  gpio_toggle_out     = gpio_toggle_reg;    
 
 assign  gpio_pullup_out     = gpio_pullup_reg;    
 assign  gpio_pulldown_out   = gpio_pulldown_reg;  
