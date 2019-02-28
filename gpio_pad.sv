@@ -92,7 +92,7 @@ module gpio_pad
 
         assign gpio_pad_out11 = (gpio_pad_block_dir[11]) ? gpio_pad_block_out[11] : 1'bz;
 
-        assign gpio_pad_block_in[11] = gpio_pad_out14;
+        assign gpio_pad_block_in[11] = gpio_pad_out11;
 
 //----------------------------------------------------------------------------------------
 

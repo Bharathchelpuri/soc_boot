@@ -41,6 +41,8 @@ module gpio_top_regfile (
     input logic         spi_clk_w,
     input logic         spi_mosi_w,
 
+    input logic         boot_gpio_en_in,
+
     input logic         i2c_scl_w,
     input logic         i2c_sda_out_w,
     input logic         i2c_sda_oe_w,
@@ -60,6 +62,11 @@ module gpio_top_regfile (
     output logic         uart_rx_w,
     output logic         spi_miso_w,
     output logic         i2c_sda_in_w,
+
+    output logic         boot_gpio_out9,
+    output logic         boot_gpio_out10,
+    output logic         boot_gpio_out11, 
+
     output logic [14:0]  irq_in_w,
 
     output logic [31:0] gpio_pullup_out_w,
@@ -159,6 +166,11 @@ module gpio_top_regfile (
 
     .pinmux0        (pinmux0_out_w), //in
     .pinmux1        (pinmux1_out_w), //in
+
+    .boot_gpio_en   (boot_gpio_en_in), //in
+    .boot_gpio9    (boot_gpio_out9),  //out
+    .boot_gpio10   (boot_gpio_out10), //out
+    .boot_gpio11   (boot_gpio_out11), //out
 
     .uart_tx        (uart_tx_w), //in
     .uart_rx        (uart_rx_w), //out

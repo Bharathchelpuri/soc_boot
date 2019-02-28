@@ -26,6 +26,14 @@ module pinmux_gpio_ss
     input   logic           uart_tx,
     output  logic           uart_rx,
 
+//////////////////////////////////////////////////////
+//////boot
+/////////////////////////////////////////////////////
+
+    input logic             boot_gpio_en,
+    output logic            boot_gpio9,
+    output logic            boot_gpio10,
+    output logic            boot_gpio11,    
 
 //////////////////////////////////////////////////////
 ////// SPI
@@ -123,12 +131,15 @@ always_comb begin
     spi_miso     = 1'b0;
     i2c_sda_in   = 1'b0;
     irq_in       = 15'h0;
+    boot_gpio11  = 1'b0;  // need to conform default value 
+    boot_gpio10  = 1'b0;  // need to conform default value 
+    boot_gpio9   = 1'b0;  // need to conform default value 
     
 /////////////////////////////////////////////////////////
 //////////  GPIO0 MUX
 /////////////////////////////////////////////////////////
 
-    unique case(func_sel[0])
+     case(func_sel[0])
 
         PINMUX_GPIO:
         begin
@@ -164,7 +175,7 @@ always_comb begin
 /////////////////////////////////////////////////////////
 
 
-    unique case(func_sel[1])
+     case(func_sel[1])
     
         PINMUX_GPIO:
         begin
@@ -196,7 +207,7 @@ always_comb begin
 //////////  GPIO2 MUX
 /////////////////////////////////////////////////////////
 
-    unique case(func_sel[2])
+     case(func_sel[2])
 
         PINMUX_GPIO:
         begin
@@ -231,7 +242,7 @@ always_comb begin
 //////////  GPIO3 MUX
 /////////////////////////////////////////////////////////
 
-    unique case(func_sel[3])
+     case(func_sel[3])
     
         PINMUX_GPIO:
         begin
@@ -263,7 +274,7 @@ always_comb begin
 //////////  GPIO4 MUX
 /////////////////////////////////////////////////////////
 
-    unique case(func_sel[4])
+     case(func_sel[4])
     
         PINMUX_GPIO:
         begin
@@ -298,7 +309,7 @@ always_comb begin
 //////////  GPIO5 MUX
 /////////////////////////////////////////////////////////
 
-    unique case(func_sel[5])
+     case(func_sel[5])
     
         PINMUX_GPIO:
         begin
@@ -333,7 +344,7 @@ always_comb begin
 //////////  GPIO6 MUX
 /////////////////////////////////////////////////////////
 
-    unique case(func_sel[6])
+     case(func_sel[6])
     
         PINMUX_GPIO:
         begin
@@ -368,7 +379,7 @@ always_comb begin
 //////////  GPIO7 MUX
 /////////////////////////////////////////////////////////
 
-    unique case(func_sel[7])
+     case(func_sel[7])
     
         PINMUX_GPIO:
         begin
@@ -400,7 +411,7 @@ always_comb begin
 //////////  GPIO8 MUX
 /////////////////////////////////////////////////////////
 
-    unique case(func_sel[8])
+     case(func_sel[8])
     
         PINMUX_GPIO:
         begin
@@ -435,7 +446,17 @@ always_comb begin
 //////////  GPIO9 MUX
 /////////////////////////////////////////////////////////
 
-    unique case(func_sel[9])
+if (boot_gpio_en) begin
+
+    gpio_pad_oe[9] = 1'b0;
+
+    boot_gpio9 = gpio_pad_in[9];
+
+    end
+
+    else  begin
+
+     case(func_sel[9])
     
         PINMUX_GPIO:
         begin
@@ -466,11 +487,23 @@ always_comb begin
     
     endcase
 
+    end
+
 /////////////////////////////////////////////////////////
 //////////  GPIO10 MUX
 /////////////////////////////////////////////////////////
 
-    unique case(func_sel[10])
+  if (boot_gpio_en) begin
+
+    gpio_pad_oe[10] = 1'b0;
+
+    boot_gpio10 = gpio_pad_in[10];
+
+    end
+
+    else  begin
+    
+     case(func_sel[10])
     
         PINMUX_GPIO:
         begin
@@ -501,11 +534,23 @@ always_comb begin
     
     endcase
 
+    end
+
 /////////////////////////////////////////////////////////
 //////////  GPIO11 MUX
 /////////////////////////////////////////////////////////
 
-    unique case(func_sel[11])
+if (boot_gpio_en) begin
+
+    gpio_pad_oe[11] = 1'b0;
+
+    boot_gpio11 = gpio_pad_in[11];
+
+    end
+
+    else  begin
+
+     case(func_sel[11])
     
         PINMUX_GPIO:
         begin
@@ -536,11 +581,13 @@ always_comb begin
     
     endcase
 
+    end
+
 /////////////////////////////////////////////////////////
 //////////  GPIO12 MUX
 /////////////////////////////////////////////////////////
 
-    unique case(func_sel[12])
+     case(func_sel[12])
     
         PINMUX_GPIO:
         begin
@@ -575,7 +622,7 @@ always_comb begin
 //////////  GPIO13 MUX
 /////////////////////////////////////////////////////////
 
-    unique case(func_sel[13])
+     case(func_sel[13])
     
         PINMUX_GPIO:
         begin
@@ -610,7 +657,7 @@ always_comb begin
 //////////  GPIO14 MUX
 /////////////////////////////////////////////////////////
 
-    unique case(func_sel[14])
+     case(func_sel[14])
     
         PINMUX_GPIO:
         begin
