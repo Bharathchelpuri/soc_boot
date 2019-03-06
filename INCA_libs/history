@@ -1,9 +1,0 @@
-//
-// File created by:  irun
-// Do not modify this file
-
-s1::(27Feb2019:17:49:57):( irun -access +rwc gpio_pad.sv gpio_regfile.sv gpio_top_regfile.sv pinmux_gpio_ss.sv )
-s2::(27Feb2019:17:51:29):( irun -access +rwc gpio_pad.sv gpio_regfile.sv gpio_top_regfile.sv pinmux_gpio_ss.sv )
-s3::(27Feb2019:17:53:40):( irun -access +rwc gpio_pad.sv gpio_regfile.sv gpio_top_regfile.sv pinmux_gpio_ss.sv )
-s4::(27Feb2019:17:55:16):( irun -access +rwc gpio_pad.sv gpio_regfile.sv gpio_top_regfile.sv pinmux_gpio_ss.sv )
-s5::(27Feb2019:17:56:52):( irun -access +rwc gpio_pad.sv gpio_regfile.sv gpio_top_regfile.sv pinmux_gpio_ss.sv )

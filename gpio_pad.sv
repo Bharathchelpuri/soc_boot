@@ -1,8 +1,8 @@
 module gpio_pad
 (
-    input  wire [14:0] gpio_pad_block_dir,
-    input  wire [14:0] gpio_pad_block_out,
-    output wire [14:0] gpio_pad_block_in,
+    input  wire [16:0] gpio_pad_block_dir,
+    input  wire [16:0] gpio_pad_block_out,
+    output wire [16:0] gpio_pad_block_in,
     //inout  wire [14:0] gpio_pad_out
     inout wire  gpio_pad_out0 ,
     inout wire  gpio_pad_out1 ,
@@ -18,7 +18,10 @@ module gpio_pad
     inout wire  gpio_pad_out11,
     inout wire  gpio_pad_out12,
     inout wire  gpio_pad_out13,
-    inout wire  gpio_pad_out14
+    inout wire  gpio_pad_out14,
+    inout wire  gpio_pad_out15,
+    inout wire  gpio_pad_out16
+    
     
 );
 
@@ -112,7 +115,17 @@ module gpio_pad
 
         assign gpio_pad_block_in[14] = gpio_pad_out14;
 
+//----------------------------------------------------------------------------------------
 
+        assign gpio_pad_out15 = (gpio_pad_block_dir[15]) ? gpio_pad_block_out[15] : 1'bz;
+
+        assign gpio_pad_block_in[15] = gpio_pad_out15;
+
+//----------------------------------------------------------------------------------------
+
+        assign gpio_pad_out16 = (gpio_pad_block_dir[16]) ? gpio_pad_block_out[16] : 1'bz;
+
+        assign gpio_pad_block_in[16] = gpio_pad_out16;
 
 endmodule
 

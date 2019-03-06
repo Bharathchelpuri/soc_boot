@@ -128,7 +128,7 @@ assign read_en = psel & penable & (~pwrite);
 always@(posedge pclk or negedge presetn) begin 
     if(!presetn) begin
 
-         gpio_dir_reg        <= 32'h0;      
+         gpio_dir_reg        <= 32'h00000E00;      
          gpio_out_reg        <= 32'h0;
          
          gpio_pullup_reg     <= 32'h0;

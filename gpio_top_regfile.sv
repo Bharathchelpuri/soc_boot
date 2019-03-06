@@ -33,6 +33,9 @@ module gpio_top_regfile (
     inout logic           gpio_out12,
     inout logic           gpio_out13,
     inout logic           gpio_out14,
+    inout logic           gpio_out15,
+    inout logic           gpio_out16,
+
 
    //input ports 
     input logic         uart_tx_w,
@@ -41,14 +44,12 @@ module gpio_top_regfile (
     input logic         spi_clk_w,
     input logic         spi_mosi_w,
 
-    input logic         boot_gpio_en_in,
-
     input logic         i2c_scl_w,
     input logic         i2c_sda_out_w,
     input logic         i2c_sda_oe_w,
 
     input logic         clk_out_w,
-    input logic [13:0]  debug_w,
+    input logic [15:0]  debug_w,
 
     input logic         atclk_w,
     input logic         atvalid_w,
@@ -63,11 +64,11 @@ module gpio_top_regfile (
     output logic         spi_miso_w,
     output logic         i2c_sda_in_w,
 
-    output logic         boot_gpio_out9,
-    output logic         boot_gpio_out10,
-    output logic         boot_gpio_out11, 
+    output logic         pll_clk_fail_out,
+    output logic         rc_clk_fail_out,
+    output logic         boot_load_done_out, 
 
-    output logic [14:0]  irq_in_w,
+    output logic [16:0]  irq_in_w,
 
     output logic [31:0] gpio_pullup_out_w,
     output logic [31:0] gpio_pulldown_out_w,
@@ -101,9 +102,9 @@ module gpio_top_regfile (
  
     //pinmux instance wires
 
-    logic [14:0]  gpio_pad_in_w;   //done
-    logic [14:0]  gpio_pad_out_w;  //done
-    logic [14:0]  gpio_pad_oe_w;   //done
+    logic [16:0]  gpio_pad_in_w;   //done
+    logic [16:0]  gpio_pad_out_w;  //done
+    logic [16:0]  gpio_pad_oe_w;   //done
 
 
 
@@ -167,10 +168,9 @@ module gpio_top_regfile (
     .pinmux0        (pinmux0_out_w), //in
     .pinmux1        (pinmux1_out_w), //in
 
-    .boot_gpio_en   (boot_gpio_en_in), //in
-    .boot_gpio9    (boot_gpio_out9),  //out
-    .boot_gpio10   (boot_gpio_out10), //out
-    .boot_gpio11   (boot_gpio_out11), //out
+    .pll_clk_fail   (pll_clk_fail_out),  //out
+    .rc_clk_fail    (rc_clk_fail_out), //out
+    .boot_load_done (boot_load_done_out), //out
 
     .uart_tx        (uart_tx_w), //in
     .uart_rx        (uart_rx_w), //out
@@ -219,8 +219,10 @@ module gpio_top_regfile (
     .gpio_pad_out11       (gpio_out11),
     .gpio_pad_out12       (gpio_out12),
     .gpio_pad_out13       (gpio_out13),
-    .gpio_pad_out14       (gpio_out14)
-
+    .gpio_pad_out14       (gpio_out14),
+    .gpio_pad_out15       (gpio_out15),
+    .gpio_pad_out16       (gpio_out16)
+    
  );   
 
 endmodule
