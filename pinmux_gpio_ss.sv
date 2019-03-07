@@ -56,6 +56,12 @@ module pinmux_gpio_ss
     output  logic   [16:0]  irq_in,
 
 //////////////////////////////////////////////////////
+////// XTAL OUT
+//////////////////////////////////////////////////////
+    input  logic            xtal_out,
+
+
+//////////////////////////////////////////////////////
 ////// DEBUG
 //////////////////////////////////////////////////////
     input   logic           clk_out,
@@ -125,15 +131,15 @@ end
 
 always_comb begin
 
-    gpio_pad_out = 16'h0;
-    gpio_pad_oe  = 16'h0;
-    gpio_in_reg  = 32'h0;   // output is declared but not sending any data 
-    uart_rx      = 1'b0;
-    spi_miso     = 1'b0;
-    i2c_sda_in   = 1'b0;
-    irq_in       = 16'h0;
-    rc_clk_fail  = 1'b0;  // need to conform default value 
-    pll_clk_fail  = 1'b0;  // need to conform default value 
+    gpio_pad_out     = 17'h0;
+    gpio_pad_oe      = 17'h0;
+    gpio_in_reg      = 32'h0;   // output is declared but not sending any data 
+    uart_rx          = 1'b0;
+    spi_miso         = 1'b0;
+    i2c_sda_in       = 1'b0;
+    irq_in           = 17'h0;
+    rc_clk_fail      = 1'b0;  // need to conform default value 
+    pll_clk_fail     = 1'b0;  // need to conform default value 
     boot_load_done   = 1'b0;  // need to conform default value 
     
 /////////////////////////////////////////////////////////
@@ -143,10 +149,14 @@ always_comb begin
      case(func_sel[0])
 
         PINMUX_GPIO:
-        begin
+        if (gpio_dir_reg[0]) begin
+
             gpio_pad_out[0] = gpio_out_reg[0];
             gpio_pad_oe [0] = gpio_dir_reg[0];
-        end
+            end
+
+            else 
+                gpio_in_reg[0] = gpio_pad_in[0];
 
         PINMUX_PERIPHERAL:
         begin
@@ -179,11 +189,14 @@ always_comb begin
      case(func_sel[1])
     
         PINMUX_GPIO:
-        begin
+        if (gpio_dir_reg[1]) begin
             gpio_pad_out[1] = gpio_out_reg[1];
-            gpio_pad_oe [1] = gpio_dir_reg[1];
-        end
-    
+            gpio_pad_oe [1] = gpio_dir_reg[1]; 
+            end
+
+            else 
+                gpio_in_reg[1] = gpio_pad_in[1];
+                    
         PINMUX_PERIPHERAL:
             uart_rx = gpio_pad_in[1];
     
@@ -211,10 +224,13 @@ always_comb begin
      case(func_sel[2])
 
         PINMUX_GPIO:
-        begin
+        if (gpio_dir_reg[2]) begin
             gpio_pad_out[2] = gpio_out_reg[2];
-            gpio_pad_oe [2] = gpio_dir_reg[2];
-        end
+            gpio_pad_oe [2] = gpio_dir_reg[2]; 
+            end
+
+            else 
+                gpio_in_reg[2] = gpio_pad_in[2];
 
         PINMUX_PERIPHERAL:
         begin
@@ -246,11 +262,14 @@ always_comb begin
      case(func_sel[3])
     
         PINMUX_GPIO:
-        begin
+        if (gpio_dir_reg[3]) begin
             gpio_pad_out[3] = gpio_out_reg[3];
-            gpio_pad_oe [3] = gpio_dir_reg[3];
-        end
-    
+            gpio_pad_oe [3] = gpio_dir_reg[3]; 
+            end
+
+            else 
+                gpio_in_reg[3] = gpio_pad_in[3];
+   
         PINMUX_PERIPHERAL:
             spi_miso = gpio_pad_in[3];
     
@@ -278,11 +297,14 @@ always_comb begin
      case(func_sel[4])
     
         PINMUX_GPIO:
-        begin
+        if (gpio_dir_reg[4]) begin
             gpio_pad_out[4] = gpio_out_reg[4];
-            gpio_pad_oe [4] = gpio_dir_reg[4];
-        end
-    
+            gpio_pad_oe [4] = gpio_dir_reg[4]; 
+            end
+
+            else 
+                gpio_in_reg[4] = gpio_pad_in[4];
+   
         PINMUX_PERIPHERAL:
         begin
             gpio_pad_out[4] = spi_clk;
@@ -313,11 +335,13 @@ always_comb begin
      case(func_sel[5])
     
         PINMUX_GPIO:
-        begin
+        if (gpio_dir_reg[5]) begin
             gpio_pad_out[5] = gpio_out_reg[5];
-            gpio_pad_oe [5] = gpio_dir_reg[5];
-        end
-    
+            gpio_pad_oe [5] = gpio_dir_reg[5]; 
+            end
+
+            else 
+                gpio_in_reg[5] = gpio_pad_in[5];
         PINMUX_PERIPHERAL:
         begin
             gpio_pad_out[5] = spi_cs;
@@ -348,11 +372,14 @@ always_comb begin
      case(func_sel[6])
     
         PINMUX_GPIO:
-        begin
+        if (gpio_dir_reg[6]) begin
             gpio_pad_out[6] = gpio_out_reg[6];
-            gpio_pad_oe [6] = gpio_dir_reg[6];
-        end
-    
+            gpio_pad_oe [6] = gpio_dir_reg[6]; 
+            end
+
+            else 
+                gpio_in_reg[6] = gpio_pad_in[6];
+   
         PINMUX_PERIPHERAL:
         begin
             gpio_pad_out[6] = i2c_sda_out;
@@ -383,11 +410,14 @@ always_comb begin
      case(func_sel[7])
     
         PINMUX_GPIO:
-        begin
+        if (gpio_dir_reg[7]) begin
             gpio_pad_out[7] = gpio_out_reg[7];
-            gpio_pad_oe [7] = gpio_dir_reg[7];
-        end
-    
+            gpio_pad_oe [7] = gpio_dir_reg[7]; 
+            end
+
+            else 
+                gpio_in_reg[7] = gpio_pad_in[7];
+   
         PINMUX_PERIPHERAL:
             i2c_sda_in = i2c_scl;
     
@@ -415,14 +445,17 @@ always_comb begin
      case(func_sel[8])
     
         PINMUX_GPIO:
-        begin
+        if (gpio_dir_reg[8]) begin
             gpio_pad_out[8] = gpio_out_reg[8];
-            gpio_pad_oe [8] = gpio_dir_reg[8];
-        end
-    
+            gpio_pad_oe [8] = gpio_dir_reg[8]; 
+            end
+
+            else 
+                gpio_in_reg[8] = gpio_pad_in[8];
+  
         PINMUX_PERIPHERAL:
         begin
-            gpio_pad_out[8] = gpio_out_reg[8];
+            gpio_pad_out[8] = xtal_out; 
             gpio_pad_oe [8] = 1'b1;
         end
     
@@ -446,25 +479,18 @@ always_comb begin
 /////////////////////////////////////////////////////////
 //////////  GPIO9 MUX
 /////////////////////////////////////////////////////////
-/*
-if (boot_gpio_en) begin
-
-    gpio_pad_oe[9] = 1'b0;
-
-    boot_gpio9 = gpio_pad_in[9];
-
-    end
-
-    else  begin */
 
      case(func_sel[9])
     
         PINMUX_GPIO:
-        begin
-            pll_clk_fail = gpio_out_reg[9];
-            gpio_pad_oe [9] = gpio_dir_reg[9];
-        end
-    
+        if (gpio_dir_reg[9]) begin
+            gpio_pad_out[9] = gpio_out_reg[9];
+            gpio_pad_oe [9] = gpio_dir_reg[9]; 
+            end
+
+            else 
+                pll_clk_fail = gpio_pad_in[9];
+   
         PINMUX_PERIPHERAL:
         begin
             gpio_pad_out[9] = gpio_out_reg[9];
@@ -488,29 +514,22 @@ if (boot_gpio_en) begin
     
     endcase
 
-   // end
 
 /////////////////////////////////////////////////////////
 //////////  GPIO10 MUX
 /////////////////////////////////////////////////////////
-/*
-  if (boot_gpio_en) begin
-
-    gpio_pad_oe[10] = 1'b0;
-
-    boot_gpio10 = gpio_pad_in[10];
-
-    end
-
-    else  begin  */
     
      case(func_sel[10])
     
         PINMUX_GPIO:
-        begin
-             rc_clk_fail = gpio_out_reg[10];
-             gpio_pad_oe [10] = gpio_dir_reg[10];
-        end
+        if (gpio_dir_reg[10]) begin
+            gpio_pad_out[10] = gpio_out_reg[10];
+            gpio_pad_oe [10] = gpio_dir_reg[10]; 
+            end
+
+            else 
+                rc_clk_fail = gpio_pad_in[10];
+
     
         PINMUX_PERIPHERAL:
         begin
@@ -535,30 +554,22 @@ if (boot_gpio_en) begin
     
     endcase
 
-    //end
 
 /////////////////////////////////////////////////////////
 //////////  GPIO11 MUX
 /////////////////////////////////////////////////////////
-/*
-if (boot_gpio_en) begin
-
-    gpio_pad_oe[11] = 1'b0;
-
-    boot_gpio11 = gpio_pad_in[11];
-
-    end
-
-    else  begin  */
 
      case(func_sel[11])
     
         PINMUX_GPIO:
-        begin
-             boot_load_done = gpio_out_reg[11];
-             gpio_pad_oe [11] = gpio_dir_reg[11];
-        end
-    
+        if (gpio_dir_reg[11]) begin
+            gpio_pad_out[11] = gpio_out_reg[11];
+            gpio_pad_oe [11] = gpio_dir_reg[11]; 
+            end
+
+            else 
+                boot_load_done = gpio_pad_in[11];
+   
         PINMUX_PERIPHERAL:
         begin
             gpio_pad_out[11] = gpio_out_reg[11];
@@ -582,7 +593,6 @@ if (boot_gpio_en) begin
     
     endcase
 
-   // end
 
 /////////////////////////////////////////////////////////
 //////////  GPIO12 MUX
@@ -591,11 +601,14 @@ if (boot_gpio_en) begin
      case(func_sel[12])
     
         PINMUX_GPIO:
-        begin
+        if (gpio_dir_reg[12]) begin
             gpio_pad_out[12] = gpio_out_reg[12];
-            gpio_pad_oe [12] = gpio_dir_reg[12];
-        end
-    
+            gpio_pad_oe [12] = gpio_dir_reg[12]; 
+            end
+
+            else 
+                gpio_in_reg[12] = gpio_pad_in[12];
+
         PINMUX_PERIPHERAL:
         begin
             gpio_pad_out[12] = gpio_out_reg[12];
@@ -626,11 +639,14 @@ if (boot_gpio_en) begin
      case(func_sel[13])
     
         PINMUX_GPIO:
-        begin
+        if (gpio_dir_reg[13]) begin
             gpio_pad_out[13] = gpio_out_reg[13];
-            gpio_pad_oe [13] = gpio_dir_reg[13];
-        end
-    
+            gpio_pad_oe [13] = gpio_dir_reg[13]; 
+            end
+
+            else 
+                gpio_in_reg[13] = gpio_pad_in[13];
+   
         PINMUX_PERIPHERAL:
         begin
             gpio_pad_out[13] = gpio_out_reg[13];
@@ -661,11 +677,14 @@ if (boot_gpio_en) begin
      case(func_sel[14])
     
         PINMUX_GPIO:
-        begin
+        if (gpio_dir_reg[14]) begin
             gpio_pad_out[14] = gpio_out_reg[14];
-            gpio_pad_oe [14] = gpio_dir_reg[14];
-        end
-    
+            gpio_pad_oe [14] = gpio_dir_reg[14]; 
+            end
+
+            else 
+                gpio_in_reg[14] = gpio_pad_in[14];
+   
         PINMUX_PERIPHERAL:
         begin
             gpio_pad_out[14] = gpio_out_reg[14];
@@ -696,11 +715,14 @@ if (boot_gpio_en) begin
      case(func_sel[15])
     
         PINMUX_GPIO:
-        begin
+        if (gpio_dir_reg[15]) begin
             gpio_pad_out[15] = gpio_out_reg[15];
-            gpio_pad_oe [15] = gpio_dir_reg[15];
-        end
-    
+            gpio_pad_oe [15] = gpio_dir_reg[15]; 
+            end
+
+            else 
+                gpio_in_reg[15] = gpio_pad_in[15];
+   
         PINMUX_PERIPHERAL:
         begin
             gpio_pad_out[15] = gpio_out_reg[15];
@@ -730,11 +752,14 @@ if (boot_gpio_en) begin
      case(func_sel[16])
     
         PINMUX_GPIO:
-        begin
+        if (gpio_dir_reg[16]) begin
             gpio_pad_out[16] = gpio_out_reg[16];
-            gpio_pad_oe [16] = gpio_dir_reg[16];
-        end
-    
+            gpio_pad_oe [16] = gpio_dir_reg[16]; 
+            end
+
+            else 
+                gpio_in_reg[16] = gpio_pad_in[16];
+   
         PINMUX_PERIPHERAL:
         begin
             gpio_pad_out[16] = gpio_out_reg[16];

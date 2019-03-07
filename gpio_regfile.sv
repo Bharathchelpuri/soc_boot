@@ -122,13 +122,11 @@ assign write_en = psel & penable & pwrite;
 
 assign read_en = psel & penable & (~pwrite);
 
-//assign addr = paddr[7:0];
-
 //write logic
-always@(posedge pclk or negedge presetn) begin 
+always_ff @(posedge pclk or negedge presetn) begin 
     if(!presetn) begin
 
-         gpio_dir_reg        <= 32'h00000E00;      
+         gpio_dir_reg        <= 32'h0;      
          gpio_out_reg        <= 32'h0;
          
          gpio_pullup_reg     <= 32'h0;
@@ -178,7 +176,7 @@ end
              GPIO_INT_EN_ADDR     :    gpio_int_en_reg      <=  pwdata  ;
              // updated by the gpio interupt , currently only cleared by the apb interface
              //                     gpio_int_status_reg  <=  gpio_int_status_reg | gpio_interupt ;
-             GPIO_INT_CLR_ADDR    :    gpio_int_status_reg  <=  gpio_int_status_reg & ~pwdata ;
+             GPIO_INT_CLR_ADDR    :    gpio_int_status_reg  <=  gpio_int_status_reg & ~pwdata;
 
              GPIO_RISE_EN_ADDR    :    gpio_rise_en_reg     <=  pwdata  ;
              GPIO_FALL_EN_ADDR    :    gpio_fall_en_reg     <=  pwdata  ;
@@ -192,8 +190,26 @@ end
              GPIO_LOCK_ADDR       :    gpio_lock_reg        <=  pwdata  ;
              DEBUG_SEL_ADDR       :    debug_sel_reg        <=  pwdata  ;
 
-             default              : begin
-             end
+             default: begin
+	    			gpio_dir_reg        <= gpio_dir_reg;
+	    			gpio_out_reg        <= gpio_out_reg;
+	    			gpio_pullup_reg     <= gpio_pullup_reg;
+	    			gpio_pulldown_reg   <= gpio_pulldown_reg;
+	    			gpio_opendrain_reg  <= gpio_opendrain_reg;
+	    			gpio_schmitt_reg    <= gpio_schmitt_reg;
+	    			gpio_drv0_reg       <= gpio_drv0_reg;
+	    			gpio_drv1_reg       <= gpio_drv1_reg;
+	   			gpio_int_en_reg     <= gpio_int_en_reg;
+	    			gpio_int_status_reg <= gpio_int_status_reg;
+	    			gpio_rise_en_reg    <= gpio_rise_en_reg;
+	    			gpio_fall_en_reg    <= gpio_fall_en_reg;
+	    			gpio_high_en_reg    <= gpio_high_en_reg;
+	    			gpio_low_en_reg     <= gpio_low_en_reg;
+	    			pinmux0_reg         <= pinmux0_reg;
+	    			pinmux1_reg         <= pinmux1_reg;
+	    			gpio_lock_reg       <= gpio_lock_reg;
+	    			debug_sel_reg       <= debug_sel_reg;
+			end
 
              endcase
 

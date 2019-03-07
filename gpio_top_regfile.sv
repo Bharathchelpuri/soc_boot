@@ -59,6 +59,8 @@ module gpio_top_regfile (
     input logic [2:0]   atid_w,
     input logic [15:0]  atdata_w,
 
+    input logic         xtal_out_w,
+
     //output signals
     output logic         uart_rx_w,
     output logic         spi_miso_w,
@@ -196,7 +198,9 @@ module gpio_top_regfile (
     .atsync         (atsync_w), //in 
 
     .atid           (atid_w), //in
-    .atdata         (atdata_w)  //in
+    .atdata         (atdata_w),  //in
+
+    .xtal_out       (xtal_out_w)
 
  );
 
